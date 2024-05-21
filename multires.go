@@ -15,8 +15,8 @@ import (
 )
 
 func main() {
-	// map with the desired scales and dimensions
-	resolutions := map[string]uint{"100": 24, "125": 30, "150": 36, "175": 42, "200": 48, "400": 96}
+	// map with the desired scales and dimensions (width, height)
+	resolutions := map[string][]uint{"100": {24, 24}, "125": {30, 30}, "150": {36, 36}, "175": {42, 42}, "200": {48, 48}, "400": {96, 96}}
 
 	log.SetPrefix("multires: ")
 	log.SetFlags(0)
@@ -42,7 +42,7 @@ func main() {
 			var svgFullName string = filepath.Join(sourceFolder, svg)
 			var pngFileName string = strings.Replace(svg, ".svg", ".png", 1)
 			var pngFullName string = filepath.Join(sourceFolder, folderName, pngFileName)
-			err = toPng(svgFullName, pngFullName, int(size), int(size))
+			err = toPng(svgFullName, pngFullName, int(size[0]), int(size[1]))
 			if err != nil {
 				log.Print(err)
 			} else {
