@@ -16,4 +16,4 @@ images/125/exampleToo.png
 ...
 ```
 
-The desired scales and dimensions have to be adjusted [@line 24](https://github.com/RetGal/multires/blob/2bbdb59dea641190506ad0d2da71bedddb3862b0/multires.go#L24)
+The desired scales and dimensions have to be adjusted [@line 25](https://github.com/RetGal/multires/blob/7abad33ed7021d848f2c95ba236aa7aa28e7a4f7/multires.go#L25)
