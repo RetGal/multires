@@ -15,13 +15,14 @@ import (
 )
 
 type Dimension struct {
+	scale  string
 	width  uint
 	height uint
 }
 
 func main() {
-	// map with the desired scales and dimensions
-	resolutions := map[string]Dimension{"100": {24, 24}, "125": {30, 30}, "150": {36, 36}, "175": {42, 42}, "200": {48, 48}, "400": {96, 96}}
+	// the desired resolutions
+	resolutions := []Dimension{{"100", 24, 24}, {"125", 30, 30}, {"150", 36, 36}, {"175", 42, 42}, {"200", 48, 48}, {"400", 96, 96}}
 
 	log.SetPrefix("multires: ")
 	log.SetFlags(0)
@@ -41,13 +42,13 @@ func main() {
 	}
 
 	count := 0
-	for folderName, size := range resolutions {
-		os.Mkdir(filepath.Join(sourceFolder, folderName), 0755)
+	for _, dimension := range resolutions {
+		os.Mkdir(filepath.Join(sourceFolder, dimension.scale), 0755)
 		for _, svg := range svgFileNames {
 			var svgFullName string = filepath.Join(sourceFolder, svg)
 			var pngFileName string = strings.Replace(svg, ".svg", ".png", 1)
-			var pngFullName string = filepath.Join(sourceFolder, folderName, pngFileName)
-			err = toPng(svgFullName, pngFullName, int(size.width), int(size.height))
+			var pngFullName string = filepath.Join(sourceFolder, dimension.scale, pngFileName)
+			err = toPng(svgFullName, pngFullName, int(dimension.width), int(dimension.height))
 			if err != nil {
 				log.Print(err)
 			} else {
