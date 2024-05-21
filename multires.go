@@ -15,6 +15,9 @@ import (
 )
 
 func main() {
+	// map with the desired scales and dimensions
+	resolutions := map[string]uint{"100": 24, "125": 30, "150": 36, "175": 42, "200": 48, "400": 96}
+
 	log.SetPrefix("multires: ")
 	log.SetFlags(0)
 	flag.Parse()
@@ -32,7 +35,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	resolutions := map[string]uint{"100": 24, "125": 30, "150": 36, "175": 42, "200": 48, "400": 96}
 	count := 0
 	for folderName, size := range resolutions {
 		os.Mkdir(filepath.Join(sourceFolder, folderName), 0755)
