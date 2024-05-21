@@ -2,9 +2,11 @@
 
 Creates PNG images in different resolutions from a given directory containing one or more SVG file/s.
 
+Useful if, for example, you need to generate resources for Javas multi resolution images (icons for HiDPI support).
+
 Example usage: `./multires images/` or `go run multires.go images/`
 
-Creates a subdirectory for each resolution, each containing the images in the corresponding resolution:
+Will create a subdirectory for each resolution, each containing the images in the corresponding resolution:
 
 ```
 images/example.svg
