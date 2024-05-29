@@ -45,11 +45,10 @@ func main() {
 	for _, dimension := range resolutions {
 		os.Mkdir(filepath.Join(sourceFolder, dimension.scale), 0755)
 		for _, svg := range svgFileNames {
-			var svgFullName string = filepath.Join(sourceFolder, svg)
-			var pngFileName string = strings.Replace(svg, ".svg", ".png", 1)
-			var pngFullName string = filepath.Join(sourceFolder, dimension.scale, pngFileName)
-			err = toPng(svgFullName, pngFullName, int(dimension.width), int(dimension.height))
-			if err != nil {
+			svgFullName := filepath.Join(sourceFolder, svg)
+			pngFileName := strings.Replace(svg, ".svg", ".png", 1)
+			pngFullName := filepath.Join(sourceFolder, dimension.scale, pngFileName)
+			if err := toPng(svgFullName, pngFullName, int(dimension.width), int(dimension.height)); err != nil {
 				log.Print(err)
 			} else {
 				count++
@@ -60,22 +59,21 @@ func main() {
 }
 
 func getSvgFileNames(sourceFolder string) ([]string, error) {
-	files, err := os.ReadDir(sourceFolder)
-	if err != nil {
+
+	if files, err := os.ReadDir(sourceFolder); err != nil {
 		return nil, err
-	}
-
-	var svgFileNames []string
-	for _, file := range files {
-		if !file.IsDir() && (filepath.Ext(file.Name()) == ".svg") {
-			svgFileNames = append(svgFileNames, file.Name())
+	} else {
+		var svgFileNames []string
+		for _, file := range files {
+			if !file.IsDir() && (filepath.Ext(file.Name()) == ".svg") {
+				svgFileNames = append(svgFileNames, file.Name())
+			}
 		}
+		if len(svgFileNames) == 0 {
+			return nil, fmt.Errorf("no svg files found in %s", sourceFolder)
+		}
+		return svgFileNames, nil
 	}
-
-	if len(svgFileNames) == 0 {
-		return nil, fmt.Errorf("no svg files found in %s", sourceFolder)
-	}
-	return svgFileNames, nil
 }
 
 func toPng(svgFileName string, pngFileName string, w int, h int) error {
@@ -84,23 +82,22 @@ func toPng(svgFileName string, pngFileName string, w int, h int) error {
 		return fmt.Errorf("%s: %s", err, svgFileName)
 	}
 	defer in.Close()
+
 	icon, err := oksvg.ReadIconStream(in, oksvg.StrictErrorMode)
 	if err != nil {
 		return fmt.Errorf("%s: %s", err, svgFileName)
 	}
 
 	icon.SetTarget(0, 0, float64(w), float64(h))
-	img := image.NewRGBA(image.Rect(0, 0, w, h))
-	icon.Draw(rasterx.NewDasher(w, h, rasterx.NewScannerGV(w, h, img, img.Bounds())), 1.0)
-	if img != nil {
+	if img := image.NewRGBA(image.Rect(0, 0, w, h)); img != nil {
+		icon.Draw(rasterx.NewDasher(w, h, rasterx.NewScannerGV(w, h, img, img.Bounds())), 1.0)
 		file, err := os.Create(pngFileName)
 		if err != nil {
 			return fmt.Errorf("%s: %s", err, pngFileName)
 		}
 		defer file.Close()
 
-		err = png.Encode(file, img)
-		if err != nil {
+		if err := png.Encode(file, img); err != nil {
 			return fmt.Errorf("%s: %s", err, file.Name())
 		}
 	}
