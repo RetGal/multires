@@ -11,8 +11,8 @@ Will create a subdirectory for each resolution, each containing the images in th
 ```
 images/example.svg
 images/exampleToo.svg
-imgaes/100/example.png
-imgaes/100/exampleToo.png
+images/100/example.png
+images/100/exampleToo.png
 images/125/example.png
 images/125/exampleToo.png
 ...
